@@ -1,0 +1,303 @@
+{
+  "info": {
+    "_postman_id": "2c0eda8c-5f4f-4712-b9d6-bf16eba9bbb4",
+    "name": "E-Commerce REST API Testing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58699898",
+    "_collection_link": "https://go.postman.co/collection/58699898-2c0eda8c-5f4f-4712-b9d6-bf16eba9bbb4?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "GET - Verify Products",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Response body is not empty\", function () {\r\n    pm.expect(pm.response.text()).to.not.be.empty;\r\n});\r\n\r\npm.test(\"Product ID exists\", function () {\r\n    let response = pm.response.json();\r\n    pm.expect(response[0].id).to.exist;\r\n});\r\n\r\npm.test(\"Check product title\", function () {\r\n    let response = pm.response.json();\r\n    pm.expect(response[0].title).to.exist;\r\n});\r\n\r\npm.test(\"Check product price\", function () {\r\n    let response = pm.response.json();\r\n    pm.expect(response[0].price).to.be.a(\"number\");\r\n});\r\n\r\npm.test(\"Check product category\", function () {\r\n    let response = pm.response.json();\r\n    pm.expect(response[0].category).to.exist;\r\n});\r\n\r\n\r\npm.test(\"All products have ID\", function () {\r\n    let response = pm.response.json();\r\n\r\n    response.forEach(function (product) {\r\n        pm.expect(product.id).to.exist;\r\n    });\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://fakestoreapi.com/products",
+          "protocol": "https",
+          "host": [
+            "fakestoreapi",
+            "com"
+          ],
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST - Create Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Check POST status\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"Check product title\", function () {\r\n    let response = pm.response.json();\r\n    pm.expect(response.title).to.eql(\"Test Laptop\");\r\n});\r\n\r\npm.test(\"Check product price\", function () {\r\n    let response = pm.response.json();\r\n    pm.expect(response.price).to.eql(500);\r\n});\r\n\r\npm.test(\"Check product category\", function () {\r\n    let response = pm.response.json();\r\n    pm.expect(response.category).to.eql(\"electronics\");\r\n});\r\n\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Test Laptop\",\r\n  \"price\": 500,\r\n  \"description\": \"Testing product\",\r\n  \"image\": \"https://i.pravatar.cc\",\r\n  \"category\": \"electronics\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://fakestoreapi.com/products",
+          "protocol": "https",
+          "host": [
+            "fakestoreapi",
+            "com"
+          ],
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PUT - Update Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\r\npm.test(\"Check status\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Check updated title\", function () {\r\n    let response = pm.response.json();\r\n    pm.expect(response.title).to.eql(\"Updated Laptop\");\r\n});\r\n\r\npm.test(\"Check updated price\", function () {\r\n    let response = pm.response.json();\r\n    pm.expect(response.price).to.eql(700);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Updated Laptop\",\r\n  \"price\": 700,\r\n  \"description\": \"Updated product details\",\r\n  \"image\": \"https://i.pravatar.cc\",\r\n  \"category\": \"electronics\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://fakestoreapi.com/products/1",
+          "protocol": "https",
+          "host": [
+            "fakestoreapi",
+            "com"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PATCH - Update Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Check status\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Check updated price\", function () {\r\n    let response = pm.response.json();\r\n    pm.expect(response.price).to.eql(900);\r\n});\r\n\r\npm.test(\"Check product ID\", function () {\r\n    let response = pm.response.json();\r\n    pm.expect(response.id).to.eql(1);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"price\": 900\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://fakestoreapi.com/products/1",
+          "protocol": "https",
+          "host": [
+            "fakestoreapi",
+            "com"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE - Delete Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Check delete status\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Check response is successful\", function () {\r\n    pm.expect(pm.response.code).to.eql(200);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "https://fakestoreapi.com/products/1",
+          "protocol": "https",
+          "host": [
+            "fakestoreapi",
+            "com"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET - Invalid Endpoint",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Check invalid URL status\", function () {\r\n    pm.response.to.have.status(404);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://fakestoreapi.com/invalid-endpoint",
+          "protocol": "https",
+          "host": [
+            "fakestoreapi",
+            "com"
+          ],
+          "path": [
+            "invalid-endpoint"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET - Invalid Product ID",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Check empty response\", function () {\r\n    pm.expect(pm.response.text()).to.be.empty;\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://fakestoreapi.com/products/99999",
+          "protocol": "https",
+          "host": [
+            "fakestoreapi",
+            "com"
+          ],
+          "path": [
+            "products",
+            "99999"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET - Missing Product ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://fakestoreapi.com/products/",
+          "protocol": "https",
+          "host": [
+            "fakestoreapi",
+            "com"
+          ],
+          "path": [
+            "products",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET - Invalid ID Format",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Check empty response\", function () {\r\n    pm.expect(pm.response.text()).to.be.empty;\r\n});\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://fakestoreapi.com/products/abc",
+          "protocol": "https",
+          "host": [
+            "fakestoreapi",
+            "com"
+          ],
+          "path": [
+            "products",
+            "abc"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
